@@ -105,9 +105,9 @@ provided, additional sanity checks will be performed before converting"
   "Convert a base-whatever number string into base-10 integer"
   (when (not (string-match-p (format "^\\([0-9]*:?\\|0[bxodt]\\)[0-9A-z%s]+$" (if hex-strict hex-padding "")) number))
     (error "Not a number"))
-  (let ((number (hex--strip-padding (hex--strip-base-hint number))))
+  (let ((number (hex--strip-padding number)))
     (let ((base (or base (hex--infer-base number))))
-      (hex--string-to-number (hex--reverse-string number) base))))
+      (hex--string-to-number (hex--reverse-string (hex--strip-base-hint number)) base))))
 
 (defun hex--reverse-string (string)
   (if (string-empty-p string) ""
@@ -117,8 +117,8 @@ provided, additional sanity checks will be performed before converting"
   "Return the number string without any base hints (0x, 0b, 3:, etc)"
   (cond ((string-match-p "^0[bxodt]" number)
 	 (substring number 2))
-	((string-match-p "^[0-9]:" number)
-	 (nth 3 (split-string prefix ":" t "[ \t\n\r]")))
+	((string-match-p "^[0-9]*:" number)
+	 (or (nth 1 (split-string number ":" t "[ \t\n\r]")) ""))
 	(t number)))
 
 (defun hex--infer-base (number)
@@ -126,16 +126,15 @@ provided, additional sanity checks will be performed before converting"
   (when (not (string-match-p (format "^\\([0-9]+:\\|0[bxodt]\\)?[0-9A-z%s]+$" hex-padding) number))
     (error "Not a number"))
   (let ((prefix (substring number 0 2))
-	(base (hex--highest-base number)))
-    (when (> base hex-max-base)
-      (error "Number exceeds maximum allowed base: %s" hex-max-base))
-    (cond ((equal "0b" prefix) 2)
+	(base (hex--highest-base (hex--strip-base-hint number))))
+    (cond ((> base hex-max-base) (error "Number exceeds maximum allowed base: %s" hex-max-base))
+	  ((equal "0b" prefix) 2)
 	  ((equal "0t" prefix) 3)
 	  ((equal "0o" prefix) 8)
 	  ((equal "0d" prefix) 10)
 	  ((equal "0x" prefix) 16)
-	  ((string-match-p "^[0-9]:" number)
-	   (string-to-number (first (split-string prefix ":" t "[ \t\n\r]"))))
+	  ((string-match-p "^[0-9]+:" number)
+	   (string-to-number (car (split-string prefix ":" t "[ \t\n\r]"))))
 	  ((and hex-clamp-ten (>= 10 base 3)) 10)
 	  ((and hex-clamp-hex (>= 16 base 3)) 16)
 	  (t base))))
@@ -155,12 +154,15 @@ provided, additional sanity checks will be performed before converting"
     (- (aref (upcase digit) 0) 55)))
 
 ;;;###autoload
-(defun hex-convert (&optional number base)
-  "Read a number and a base, and output its representation in said base"
+(defun hex-convert (&optional number base silent)
+  "Read a number and a base, and output its representation in said base.
+If SILENT is non-nil, do not output anything"
   (interactive "P")
   (let ((number (or number (read-from-minibuffer "Number: ")))
-	(base (or base (read-minibuffer "Convert to base: "))))
-    (message (hex-number-to-string (hex-string-to-number number) base))))
+	(base (or base (read-minibuffer "Convert to base: ")))
+	(converted (hex-number-to-string (hex-string-to-number number) base)))
+    (when (not silent) (message converted))
+    converted))
 
 ;;;###autoload
 (defun hex-convert-point (&optional base)
