@@ -1,4 +1,4 @@
-![GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg) ![Coverage](https://img.shields.io/badge/coverage---30%25-red.svg) 
+![GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg) ![Coverage](https://img.shields.io/badge/coverage-83%25-green.svg)
 
 # hex
 Base conversion made easy in emacs
@@ -29,7 +29,7 @@ A number literal's base can be roughly determined via heuristics, but you can us
 Alternatively, you can prefix a base-n number with `n:`. Hex will automatically remove any of these base hints when converting
 
 ## Future
-Tests are next. Better base inference for hexadecimal numbers is also coming. If you feel like beating me to it, open a pull request.
+More tests are next. If you feel like beating me to it, open a pull request.
 
 ## License
 GPLv3+
