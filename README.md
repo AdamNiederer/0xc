@@ -1,5 +1,4 @@
-![GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)
-![GPLv3](https://img.shields.io/badge/coverage---30%-red.svg)
+![GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg) ![Coverage](https://img.shields.io/badge/coverage---30%25-red.svg) 
 
 # hex
 Base conversion made easy in emacs
