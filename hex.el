@@ -51,11 +51,25 @@
   :group 'hex
   :type 'string)
 
-(defcustom hex-assume-base-ten t
-  "For numbers with digits 2-9 in them, assume they are base ten"
-  :tag "Hex Assume Base Ten"
+(defcustom hex-clamp-ten t
+  "Assume numbers with digits 2-9 in them are base ten. If both
+hex-clamp-ten and hex-clamp-hex are enabled, base ten will be favored."
+  :tag "Hex Favor Base Ten"
   :group 'hex
   :type 'boolean)
+
+(defcustom hex-clamp-hex t
+  "Assume numbers with digits 2-f in them are base sixteen. If both
+hex-clamp-ten and hex-clamp-hex are enabled, base ten will be favored."
+  :tag "Hex Favor Hexadecimal"
+  :group 'hex
+  :type 'boolean)
+
+(defcustom hex-max-base 16
+  "Refuse to work with bases above this"
+  :tag "Hex Maximum Base"
+  :group 'hex
+  :type 'integer)
 
 (defcustom hex-default-base 10
   "The base to which hex-convert-point will convert to if no base is given"
@@ -74,9 +88,10 @@
   "Convert a base-10 character into a base-whatever character. If BASE is
 provided, additional sanity checks will be performed before converting"
   (cond
+   ((and base (> base hex-max-base)) (error "That base is larger than the maximum allowed base: %s" hex-max-base))
    ((and base (> char base)) (error "That character cannot fit in this base"))
    ((and base (> base 36)) (error "That base is too large to represent in ascii"))
-   ((> char 36) (error "That character is too large to represent in ascii")))
+   ((not (> 36 hex-max-base char)) (error "That character is too large to represent in ascii")))
   (if (< char 10)
       (string (+ 48 char))
     (string (+ 55 char))))
@@ -108,9 +123,12 @@ provided, additional sanity checks will be performed before converting"
 
 (defun hex--infer-base (number)
   "Return the base of a number, based on some heuristics"
-  (when (not (string-match-p (format "^\\([0-9]*:?\\|0[bxodt]\\)[0-9A-z%s]+$" hex-padding) number))
+  (when (not (string-match-p (format "^\\([0-9]+:\\|0[bxodt]\\)?[0-9A-z%s]+$" hex-padding) number))
     (error "Not a number"))
-  (let ((prefix (substring number 0 2)))
+  (let ((prefix (substring number 0 2))
+	(base (hex--highest-base number)))
+    (when (> base hex-max-base)
+      (error "Number exceeds maximum allowed base: %s" hex-max-base))
     (cond ((equal "0b" prefix) 2)
 	  ((equal "0t" prefix) 3)
 	  ((equal "0o" prefix) 8)
@@ -118,8 +136,9 @@ provided, additional sanity checks will be performed before converting"
 	  ((equal "0x" prefix) 16)
 	  ((string-match-p "^[0-9]:" number)
 	   (string-to-number (first (split-string prefix ":" t "[ \t\n\r]"))))
-	  (t (let ((base (hex--highest-base number)))
-	       (if (and hex-assume-base-ten (> base 2)) (max base 10) base))))))
+	  ((and hex-clamp-ten (>= 10 base 3)) 10)
+	  ((and hex-clamp-hex (>= 16 base 3)) 16)
+	  (t base))))
 
 (defun hex--strip-padding (number)
   (string-join (split-string number (format "[%s]" hex-padding) t "[ \t\n\r]")))
@@ -137,7 +156,7 @@ provided, additional sanity checks will be performed before converting"
 
 ;;;###autoload
 (defun hex-convert (&optional number base)
-  "Read a number and a base, "
+  "Read a number and a base, and output its representation in said base"
   (interactive "P")
   (let ((number (or number (read-from-minibuffer "Number: ")))
 	(base (or base (read-minibuffer "Convert to base: "))))
