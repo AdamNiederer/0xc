@@ -16,8 +16,20 @@ MELPA in progress
 - `hex-convert` - Simple string-to-string base conversion. Accepts prefix options and allows interactive use.
 - `hex-convert-point` - Replace the number at point with a converted representation.
 
+## Base Hinting
+
+A number literal's base can be roughly determined via heuristics, but you can use the following hints to ensure hex gets it right:
+
+- `0x` is a hexadecimal literal
+- `0b` is a binary literal
+- `0t` is a ternary literal
+- `0d` is a decimal literal
+- `0o` is an octal literal
+
+Alternatively, you can prefix a base-n number with `n:`. Hex will automatically remove any of these base hints when converting
+
 ## Future
-Tests are next. Better base inference for hexadecimal is also coming. If you feel like beating me to it, open a pull request.
+Tests are next. Better base inference for hexadecimal numbers is also coming. If you feel like beating me to it, open a pull request.
 
 ## License
 GPLv3+
