@@ -6,7 +6,7 @@
 ;; URL: http://github.com/AdamNiederer/hex
 ;; Version: 0.1
 ;; Keywords: base conversion
-;; Package-Requires: ()
+;; Package-Requires: ((emacs "24.4"))
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -31,6 +31,9 @@
 ;; "hex--".
 
 ;;; Code:
+
+(require 'subr-x)
+(require 'thingatpt)
 
 (defgroup hex nil
   "Base conversion functions"
