@@ -1,7 +1,8 @@
 ![GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg) ![Coverage](https://img.shields.io/badge/coverage-83%25-green.svg)
 
 # 0xc
-Pronounced "hex convert"
+(Pronounced "hex convert")
+
 Base conversion made easy in emacs
 
 ## Features
