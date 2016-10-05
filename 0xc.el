@@ -108,9 +108,9 @@ provided, additional sanity checks will be performed before converting"
   "Convert a base-whatever number string into base-10 integer"
   (when (not (string-match-p (format "^\\([0-9]*:?\\|0[bxodt]\\)[0-9A-z%s]+$" (if 0xc-strict 0xc-padding "")) number))
     (error "Not a number"))
-  (let ((number (0xc--strip-padding number)))
-    (let ((base (or base (0xc--infer-base number))))
-      (0xc--string-to-number (0xc--reverse-string (0xc--strip-base-hint number)) base))))
+  (let* ((number (0xc--strip-padding number))
+         (base (or base (0xc--infer-base number))))
+    (0xc--string-to-number (0xc--reverse-string (0xc--strip-base-hint number)) base)))
 
 (defun 0xc--reverse-string (string)
   (if (string-empty-p string) ""
@@ -161,7 +161,7 @@ provided, additional sanity checks will be performed before converting"
   "Read a number and a base, and output its representation in said base.
 If SILENT is non-nil, do not output anything"
   (interactive "P")
-  (let ((number (or number (read-from-minibuffer "Number: ")))
+  (let* ((number (or number (read-from-minibuffer "Number: ")))
         (base (or base (read-minibuffer "Convert to base: ")))
         (converted (0xc-number-to-string (0xc-string-to-number number) base)))
     (when (not silent) (message converted))
