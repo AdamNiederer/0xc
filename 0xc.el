@@ -160,7 +160,7 @@ provided, additional sanity checks will be performed before converting"
 (defun 0xc-convert (&optional number base silent)
   "Read a number and a base, and output its representation in said base.
 If SILENT is non-nil, do not output anything"
-  (interactive "P")
+  (interactive)
   (let* ((number (or number (read-from-minibuffer "Number: ")))
         (base (or base (read-minibuffer "Convert to base: ")))
         (converted (0xc-number-to-string (0xc-string-to-number number) base)))
