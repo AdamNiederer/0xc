@@ -64,7 +64,7 @@
 (defcustom 0xc-clamp-hex t
   "Assume numbers with digits 2-f in them are base sixteen. If both
 0xc-clamp-ten and 0xc-clamp-hex are enabled, base ten will be favored."
-  :tag "0xc Favor 0xcadecimal"
+  :tag "0xc Favor Hexadecimal"
   :group '0xc
   :type 'boolean)
 
