@@ -157,12 +157,12 @@ provided, additional sanity checks will be performed before converting"
     (- (aref (upcase digit) 0) 55)))
 
 ;;;###autoload
-(defun 0xc-convert (&optional number base silent)
+(defun 0xc-convert (base &optional number silent)
   "Read a number and a base, and output its representation in said base.
 If SILENT is non-nil, do not output anything"
-  (interactive)
+  (interactive "p")
   (let* ((number (or number (read-from-minibuffer "Number: ")))
-        (base (or base (read-minibuffer "Convert to base: ")))
+        (base (or (if (> base 1) base nil) (read-minibuffer "Convert to base: ")))
         (converted (0xc-number-to-string (0xc-string-to-number number) base)))
     (when (not silent) (message converted))
     converted))

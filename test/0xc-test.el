@@ -135,8 +135,8 @@
   (should (equal (0xc--strip-base-hint "1234567890:1") "1")))
 
 (ert-deftest 0xc-convert-test ()
-  (should (equal (0xc-convert "0xff" 10 t) "255"))
-  (should (equal (0xc-convert "0b1010" 10 t) "10"))
-  (should (equal (0xc-convert "7:100" 8 t) "61"))
-  (should (equal (0xc-convert "5:41300" 10 t) "2700"))
-  (should (equal (0xc-convert "0t10201020" 12 t) "1696")))
+  (should (equal (0xc-convert 10 "0xff" t) "255"))
+  (should (equal (0xc-convert 10 "0b1010" t) "10"))
+  (should (equal (0xc-convert 8 "7:100" t) "61"))
+  (should (equal (0xc-convert 10 "5:41300" t) "2700"))
+  (should (equal (0xc-convert 12 "0t10201020" t) "1696")))
