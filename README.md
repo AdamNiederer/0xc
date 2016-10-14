@@ -1,4 +1,4 @@
-![GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg) ![Coverage](https://img.shields.io/badge/coverage-83%25-green.svg)
+![GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg) ![Coverage](https://img.shields.io/badge/coverage-83%25-green.svg) [![MELPA](https://melpa.org/packages/0xc-badge.svg)](https://melpa.org/#/0xc)
 
 # 0xc
 (Pronounced "hex convert")
@@ -12,7 +12,8 @@ Base conversion made easy in emacs
 - Simple representation of bases up to 36
 
 ## Installation & Setup
-MELPA in progress
+0xc is avilable on [Melpa](https://melpa.org/#/0xc). After installing with `M-x package-install <RET> 0xc <RET>`,
+all functions should be available.
 
 ## Functions
 - `0xc-convert` - Simple string-to-string base conversion. Accepts prefix options and allows interactive use.
