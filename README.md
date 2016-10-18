@@ -1,4 +1,7 @@
-![GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg) ![Coverage](https://img.shields.io/badge/coverage-83%25-green.svg) [![MELPA](https://melpa.org/packages/0xc-badge.svg)](https://melpa.org/#/0xc)
+![GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)
+[![MELPA](https://melpa.org/packages/0xc-badge.svg)](https://melpa.org/#/0xc)
+[![Build Status](https://travis-ci.org/AdamNiederer/0xc.svg?branch=master)](https://travis-ci.org/AdamNiederer/0xc)
+![Coverage](https://img.shields.io/badge/coverage-83%25-green.svg)
 
 # 0xc
 (Pronounced "hex convert")
