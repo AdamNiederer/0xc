@@ -13,3 +13,5 @@ install:
   - cask install
 script:
   - cask exec ert-runner
+notifications:
+  email: false
