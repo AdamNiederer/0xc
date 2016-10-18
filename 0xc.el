@@ -81,7 +81,7 @@
   :type 'integer)
 
 (defun 0xc-number-to-string (number base)
-  "Convert a base-10 integer number into a different base string"
+  "Convert an integer number into a different base string"
   (if (equal number 0) ""
     (concat
      (0xc-number-to-string (/ number base) base)
@@ -113,6 +113,7 @@ provided, additional sanity checks will be performed before converting"
     (0xc--string-to-number (0xc--reverse-string (0xc--strip-base-hint number)) base)))
 
 (defun 0xc--reverse-string (string)
+  "Returns the reverse of a string"
   (if (string-empty-p string) ""
     (concat (0xc--reverse-string (substring string 1)) (substring string 0 1))))
 
@@ -143,6 +144,8 @@ provided, additional sanity checks will be performed before converting"
           (t base))))
 
 (defun 0xc--strip-padding (number)
+  "Remove every character contained in `0xc-padding' from number, and trim
+whitespace at the beginning and end"
   (string-join (split-string number (format "[%s]" 0xc-padding) t "[ \t\n\r]")))
 
 (defun 0xc--highest-base (string)
@@ -150,11 +153,11 @@ provided, additional sanity checks will be performed before converting"
   (if (string-empty-p string) 0
     (max (1+ (0xc--digit-value (substring string 0 1))) (0xc--highest-base (substring string 1)))))
 
-(defun 0xc--digit-value (digit)
-  "Returns the numeric value of a digit"
-  (if (string-match-p "^[0-9]" digit)
-      (string-to-number digit)
-    (- (aref (upcase digit) 0) 55)))
+(defun 0xc--digit-value (char)
+  "Returns the numeric value of an ASCII character"
+  (if (string-match-p "^[0-9]" char)
+      (string-to-number char)
+    (- (aref (upcase char) 0) 55)))
 
 ;;;###autoload
 (defun 0xc-convert (base &optional number silent)
