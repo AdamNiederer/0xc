@@ -81,6 +81,13 @@
   :group '0xc
   :type 'integer)
 
+(defcustom 0xc-extension ".."
+  "The token signifying a digit of a number should be repeated until the number's
+length is a power of two"
+  :tag "0xc Extension Token"
+  :group '0xc
+  :type 'string)
+
 (defun 0xc-number-to-string (number base)
   "Convert an integer number into a different base string"
   (if (equal number 0) ""
@@ -109,7 +116,7 @@ provided, additional sanity checks will be performed before converting"
   "Convert a base-whatever number string into base-10 integer"
   (when (not (s-matches? (format "^\\([0-9]*:?\\|0[bxodt]\\)[0-9A-z%s]+$" (if 0xc-strict 0xc-padding "")) number))
     (error "Not a number"))
-  (let* ((number (0xc--strip-padding number))
+  (let* ((number (0xc--strip-padding (0xc--extend-number number)))
          (base (or base (0xc--infer-base number))))
     (0xc--string-to-number (0xc--reverse-string (0xc--strip-base-hint number)) base)))
 
@@ -166,6 +173,26 @@ whitespace at the beginning and end"
   (if (s-matches? "^[0-9]" char)
       (string-to-number char)
     (- (aref (upcase char) 0) 55)))
+
+(defun 0xc--extend-number (number)
+  "Returns the number, with all instances of `0xc-extension' expanded according
+to the user's preferences"
+  (if (equal (s-count-matches (regexp-quote 0xc-extension) number) 0)
+      number
+    (when (> (s-count-matches (regexp-quote 0xc-extension) number) 1)
+      (error "Only one extension token may be used"))
+    (when (and (> (- (length number) 2) (s-index-of 0xc-extension number) 0)
+               (not (equal (aref number (1- (s-index-of 0xc-extension number)))
+                           (aref number (+ (length 0xc-extension) (s-index-of 0xc-extension number))))))
+      (error "The digit before and after the extension token must be the same"))
+    (let* ((number-length (length (s-replace 0xc-extension "" number)))
+           (repeat-times (- (0xc--next-power-of-2 number-length) number-length))
+           (to-repeat (string (aref number (1- (s-index-of 0xc-extension number))))))
+      (s-replace 0xc-extension (s-repeat repeat-times to-repeat) number))))
+
+(defun 0xc--next-power-of-2 (n)
+  "Return the smallest power of 2 greater than n"
+  (expt 2 (ceiling (log n 2))))
 
 ;;;###autoload
 (defun 0xc-convert (base &optional number silent)
