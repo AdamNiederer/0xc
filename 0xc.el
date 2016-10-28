@@ -187,7 +187,9 @@ to the user's preferences"
       (error "The digit before and after the extension token must be the same"))
     (let* ((number-length (length (s-replace 0xc-extension "" number)))
            (repeat-times (- (0xc--next-power-of-2 number-length) number-length))
-           (to-repeat (string (aref number (1- (s-index-of 0xc-extension number))))))
+           (to-repeat (string (aref number (if (< (1- (s-index-of 0xc-extension number)) 0)
+                                               (+ (length 0xc-extension) (s-index-of 0xc-extension number))
+                                               (1- (s-index-of 0xc-extension number)))))))
       (s-replace 0xc-extension (s-repeat repeat-times to-repeat) number))))
 
 (defun 0xc--next-power-of-2 (n)
