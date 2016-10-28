@@ -3,3 +3,4 @@
 
 (depends-on "cask")
 (depends-on "ert-runner")
+(depends-on "s")
