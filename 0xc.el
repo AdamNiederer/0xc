@@ -210,7 +210,7 @@ If SILENT is non-nil, do not output anything"
 ;;;###autoload
 (defun 0xc-convert-point (&optional base)
   "Replace the number at point with its representation in base."
-  (interactive "P")
+  (interactive "p")
   (let ((bounds (bounds-of-thing-at-point 'word))
         (number (word-at-point)))
     (replace-regexp number (0xc-number-to-string (0xc-string-to-number number) (or base 0xc-default-base)) nil (car bounds) (cdr bounds))))
