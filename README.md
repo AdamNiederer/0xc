@@ -26,11 +26,11 @@ all functions should be available.
 
 A number literal's base can be roughly determined via heuristics, but you can use the following hints to ensure 0xc gets it right:
 
-- `0x` is a hexadecimal literal
-- `0b` is a binary literal
+- `0x` and `'h` are hexadecimal literals
+- `0b` and `'b` are binary literals
 - `0t` is a ternary literal
-- `0d` is a decimal literal
-- `0o` is an octal literal
+- `0d` and `'d` are decimal literals
+- `0o` and `'o` are octal literals
 
 Alternatively, you can prefix a base-n number with `n:`. 0xc will automatically remove any of these base hints when converting
 
