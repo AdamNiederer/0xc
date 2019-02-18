@@ -187,3 +187,11 @@
   (should (equal (0xc--extend-number "01..100") "01111100"))
   ;; TODO: Check that each symbol being extended is a digit
   (should (equal (0xc--extend-number "...") ".")))
+
+(ert-deftest 0xc-convert-point-test ()
+  (should (equal (let ((inhibit-message t))
+                   (with-temp-buffer
+                     (insert "0xBEEF")
+                     (0xc-convert-point 10)
+                     (buffer-string)))
+                 "48879")))

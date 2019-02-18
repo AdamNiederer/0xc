@@ -204,7 +204,7 @@ to the user's preferences"
   "Return the smallest power of 2 greater than n"
   (expt 2 (ceiling (log n 2))))
 
-(defun 0xc-bounds-of-number-at-point ()
+(defun 0xc--bounds-of-number-at-point ()
   "Return the bounds of the number at point as a list."
   (let* ((bounds (bounds-of-thing-at-point 'word))
          (beg (car bounds)))
@@ -227,7 +227,7 @@ If SILENT is non-nil, do not output anything"
 (defun 0xc-convert-point (&optional base)
   "Replace the number at point with its representation in base."
   (interactive "P")
-  (let* ((bounds (0xc-bounds-of-number-at-point))
+  (let* ((bounds (0xc--bounds-of-number-at-point))
          (number (apply 'buffer-substring bounds)))
     (apply 'replace-string number (0xc-number-to-string
                                    (0xc-string-to-number number)
