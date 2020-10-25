@@ -57,7 +57,7 @@
   "Return all interpretations and conversions of NUMBER-STRING."
   (let* ((highest-base (0xc--highest-base number-string))
          (input-bases (if (0xc--base-prefix number-string)
-                          (list (0xc--base-prefix number-string))
+                          (list (0xc--infer-base number-string))
                         (or (seq-filter (lambda (base) (>= base highest-base)) 0xc-live-input-bases)
                             (0xc--infer-base number-string)))))
     (cons (cons "Input" (mapcar (lambda (base) (format "Base %d" base)) 0xc-live-display-bases))
