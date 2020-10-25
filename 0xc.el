@@ -93,7 +93,7 @@ length is a power of two"
   :type 'string)
 
 (defvar 0xc--number-format
-  "^\\([0-9]+:\\|'[bodh]\\|0[btodx]\\)?[[:alnum:]%s]+$"
+  (concat "^\\([0-9]+:\\|'[bodh]\\|0[btodx]\\)?\\([[:alnum:]%s]\\|" 0xc-extension "\\)+$")
   "Format string used to determine if entry is a real number.")
 
 (defun 0xc-number-to-string (number base)
@@ -124,9 +124,9 @@ provided, additional sanity checks will be performed before converting"
   "Convert a base-whatever number string into base-10 integer"
   (when (not (s-matches? (format 0xc--number-format (if 0xc-strict 0xc-padding "")) number))
     (error "Not a number"))
-  (let* ((number (0xc--strip-padding (0xc--extend-number number)))
-         (base (or base (0xc--infer-base number))))
-    (0xc--string-to-number (0xc--reverse-string (0xc--strip-base-hint number)) base)))
+  (let* ((base (or base (0xc--infer-base number)))
+         (number (0xc--strip-padding (0xc--strip-base-hint (0xc--extend-number number)))))
+    (0xc--string-to-number (0xc--reverse-string number) base)))
 
 (defun 0xc--reverse-string (string)
   "Returns the reverse of a string"
