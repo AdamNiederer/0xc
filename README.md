@@ -21,6 +21,7 @@ all functions should be available.
 ## Functions
 - `0xc-convert` - Simple string-to-string base conversion. Accepts prefix options and allows interactive use.
 - `0xc-convert-point` - Replace the number at point with a converted representation.
+- `0xc-live-convert` - Open a new window and show various interpretations and conversions for a number as you type it.
 
 ## Base Hinting
 
