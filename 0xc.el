@@ -55,6 +55,13 @@
   :group '0xc
   :type 'string)
 
+(defcustom 0xc-strict-base2 t
+  "Assume a number in base 2 always has 0b prefix. 10 and 11 will
+be ten and eleven in base 10 when t. Two and three, otherwise."
+  :tag "0xc Strict Parsing"
+  :group '0xc
+  :type 'boolean)
+
 (defcustom 0xc-clamp-ten t
   "Assume numbers with digits 2-9 in them are base ten. If both
 0xc-clamp-ten and 0xc-clamp-hex are enabled, base ten will be favored."
@@ -155,12 +162,13 @@ provided, additional sanity checks will be performed before converting"
   (when (not (s-matches? (format 0xc--number-format 0xc-padding) number))
     (error "Not a number"))
   (let ((prefix (or (0xc--base-prefix number)))
+        (clamp (if 0xc-strict-base2 2 3))
         (base (0xc--highest-base (0xc--strip-base-hint number))))
     (cond ((> (max (or prefix 0) base) 0xc-max-base) (error "Number exceeds maximum allowed base: %s" 0xc-max-base))
           ((and prefix (> base prefix)) (error "Number has a digit of a higher base than its prefix"))
           (prefix prefix)
-          ((and 0xc-clamp-ten (>= 10 base 3)) 10)
-          ((and 0xc-clamp-hex (>= 16 base 3)) 16)
+          ((and 0xc-clamp-ten (>= 10 base clamp)) 10)
+          ((and 0xc-clamp-hex (>= 16 base clamp)) 16)
           (t base))))
 
 (defun 0xc--base-prefix (number)
